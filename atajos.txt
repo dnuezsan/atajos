@@ -1,0 +1,17 @@
+
+CONEXION A BD
+
+"Conexion a BD":{
+		"prefix": "conexion",
+		"body": [
+			"protected \\$bla;",
+			"function __construct(){",
+				"\t \\$this->conexion = new mysqli(SERVIDOR, USUARIO, CONTRASENIA, BD);",
+				"\t if (\\$this->conexion->connect_errno) {",
+				"\t echo 'Se produjo un error en la conexión';",
+				"\t}",
+			"}"
+		],
+		"description": "Conexion con la base de datos"
+	}
+
