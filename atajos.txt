@@ -13,5 +13,60 @@ CONEXION A BD
 			"}"
 		],
 		"description": "Conexion con la base de datos"
-	}
+	},
 
+"insercionPreparada":{
+		"prefix": "insercionPreparada",
+		"body": ["function insercionPreparada()",
+		"{",
+			"\t//Se crea la consulta sql",
+			"\t\\$sql = 'INSERT INTO minijuego (id, nombre) VALUES (?, ?)';",
+			"\t//Se prepara la consulta",
+			"\t\\$consulta_prep = \\$this->conexion->prepare(\\$sql);\n",
+
+			"\t\\$id = 1;",
+			"\t\\$nombre = 'Peter Parker';",
+			"\t//Se asocian las variables",
+			"\t\\$consulta_prep->bind_param('', \\$id, \\$nombre);\n",
+	
+			"\tif (\\$consulta_prep->execute()) {",
+				"\t\techo 'Se ha realizado la inserción';",
+			"\t} else {",
+				"\t\techo 'No se finalizó el proceso';",
+			"\t}\n",
+			"\t//Se cierra la consulta",
+			"\t\\$consulta_prep->close();",
+		"}"
+	],
+		"description": "Consulta preparada para inserción de un unico registro de dos variables. Modificar si necesario"
+	},
+
+"inicio_sesion":{
+		"prefix": "inicio_sesion",
+		"body": ["function inicioSesion(){\n",
+    
+            "\t\\$usuario = \\$_POST['usuario'];",
+            "\t\\$contrasenia = \\$_POST['contrasenia'];\n",
+
+            "\t/* Se prepara la consulta y se asocia el valor del usuario */",
+            "\t\\$consulta = \\$this->conexion_bd->prepare('SELECT * FROM usuario WHERE usuario=?');",
+            "\t\\$consulta->bind_param('s', \\$usuario);",
+            "\t\\$consulta->execute();\n",
+        
+            "\t/* Si el usuario es correcto el proceso continúa. En caso contrario se avisa */",
+            "\tif (!\\$resultado = \\$consulta->get_result()) {",
+                "\t\techo '<p class=\"error\">El usuario o la contraseña son erróneos</p>';",
+            "\t}   /* Se comprueba que la contraseña encriptada en la base de datos coincide con la introducida */",
+             "\telse {",
+                 "\t\t/* Si cumple, se le da a una varaible de la session el id del usuario */",
+                "\t\tif (password_verify(\\$contrasenia, \\$resultado['contrasenia'])) {",
+                   "\t\t\t\\$_SESSION['id_usuario'] = \\$resultado['id'];",
+                    "\t\t\techo '<p class=\"exito\">Bienvenido</p>';",
+                "\t\t} else {",
+                    "\t\t\techo '<p class=\"error\">Usuario o contraseña no correctos</p>';",
+                "\t\t}",
+            "\t}",
+		"}"],
+			
+		"description": "Abre y genera el id de sesión si el usuario se autentica correctamente"
+	},
